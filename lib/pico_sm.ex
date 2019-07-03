@@ -49,9 +49,27 @@ defmodule PicoSM do
   def convert_to_dot_notation(rules) do
     {initializations, transitions} = rules |> Enum.split_with(fn {from, _to} -> is_nil(from) end)
 
-    oriented_edges =
+    %{items: oriented_edges} =
       transitions
-      |> Enum.map(fn {from_state, to_state} -> "#{from_state} -> #{to_state}" end)
+      |> Enum.reduce(%{items: [], extra: []}, fn {from_state, to_state}, acc ->
+        cond do
+          from_state == to_state ->
+            %{acc | items: ["#{from_state} -> #{to_state}" | acc.items]}
+
+          Enum.any?(transitions, fn params -> params == {to_state, from_state} end) ->
+            if from_state in acc.extra do
+              acc
+            else
+              %{
+                items: ["#{from_state} -> #{to_state} [dir=both]" | acc.items],
+                extra: [to_state | acc.extra]
+              }
+            end
+
+          true ->
+            %{acc | items: ["#{from_state} -> #{to_state}" | acc.items]}
+        end
+      end)
 
     initial_nodes =
       initializations |> Enum.map(fn {nil, to} -> "#{to} [style=filled, fillcolor=azure2]" end)
