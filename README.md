@@ -1,12 +1,11 @@
-
 # PicoSM - Pico State Management
 
 ## About
-Very small Elixir library for state transitions validation.
-Motivation: a library that allows having many initial states (unlike many other FSM realizations) using implicit `nil` as an initial state.
+Very small and fast Elixir library for state transitions validation with
+ability to generate graphical representation of the flow using `graphviz`.
 
 ## Usage
-Define a module
+Define a module with a set of simple transition rules, using `nil` as an initial state
 ```elixir
 defmodule MyFlow do
   use PicoSM,
@@ -15,7 +14,6 @@ defmodule MyFlow do
       nil: :b,
       nil: :c,
       nil: :d,
-      nil: :e,
       a: :e,
       a: :f,
       a: :g,
@@ -52,8 +50,7 @@ Blue states are initial, red states are final.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `pico_sm` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `pico_sm` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -63,7 +60,4 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/pico_sm](https://hexdocs.pm/pico_sm).
-
+The docs can be found at [https://hexdocs.pm/pico_sm](https://hexdocs.pm/pico_sm).
