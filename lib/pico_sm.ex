@@ -57,12 +57,14 @@ defmodule PicoSM do
             %{acc | items: ["#{from_state} -> #{to_state}" | acc.items]}
 
           Enum.any?(transitions, fn params -> params == {to_state, from_state} end) ->
-            if from_state in acc.extra do
+            uniq_key = Enum.sort([to_state, from_state])
+
+            if uniq_key in acc.extra do
               acc
             else
               %{
                 items: ["#{from_state} -> #{to_state} [dir=both]" | acc.items],
-                extra: [to_state | acc.extra]
+                extra: [uniq_key | acc.extra]
               }
             end
 
